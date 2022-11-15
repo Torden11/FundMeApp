@@ -142,16 +142,22 @@ app.post("/home/storiesu", (req, res) => {
     });
 });
 
-app.post("/home/comments/:id", (req, res) => {
+// CREATE DONATION for user
+
+app.post("/home/donations", (req, res) => {
     const sql = `
-    INSERT INTO comments (post, movie_id)
-    VALUES (?, ?)
-    `;
-    con.query(sql, [req.body.post, req.params.id], (err, result) => {
+      INSERT INTO list (name, amount, story_id)
+      VALUES (?, ?, ?)
+      `;
+    con.query(
+      sql,
+      [req.body.name, req.body.amount, req.body.story_id],
+      (err, result) => {
         if (err) throw err;
-        res.send({ msg: 'OK', text: 'Thanks for the comment.', type: 'info' });
-    });
-});
+        res.send({ msg: 'OK', text: 'Thank you for your donation!.', type: 'success' });
+      }
+    );
+  });
 
 // READ stories for user
 app.get("/home/storiesu", (req, res) => {
@@ -179,39 +185,27 @@ app.get("/home/storiesa", (req, res) => {
     });
 });
 
-//Get all movies in comments section for admin
-// app.get("/home/movies", (req, res) => {
-//     const sql = `
-//     SELECT m.*, c.id AS cid, c.post
-//     FROM movies AS m
-//     LEFT JOIN comments AS c
-//     ON c.movie_id = m.id
-//     ORDER BY m.title
-//     `;
-//     con.query(sql, (err, result) => {
-//         if (err) throw err;
-//         res.send(result);
-//     });
-// });
+// READ STORIES for home
 
-//OR
-// Get only movies with comments in comments section for admin
-// app.get("/server/movies/nocomments", (req, res) => {
-//     const sql = `
-//     SELECT m.*, c.id AS cid, c.post
-//     FROM movies AS m
-//     INNER JOIN comments AS c
-//     ON c.movie_id = m.id
-//     ORDER BY m.title
-//     `;
-//     con.query(sql, (err, result) => {
-//         if (err) throw err;
-//         res.send(result);
-//     });
-// });
+app.get("/home/stories-home", (req, res) => {
+    const sql = `
+    SELECT s.*, l.id AS lid, l.name, l.amount
+      FROM stories AS s
+      LEFT JOIN list AS l
+      ON l.story_id = s.id
+      WHERE s.status = 1
+      ORDER BY s.id
+      `;
+    con.query(sql, (err, result) => {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
 
 
-//DELETE
+
+
+//DELETE a story for user
 app.delete("/home/storiesu/:id", (req, res) => {
     const sql = `
     DELETE FROM stories
@@ -223,6 +217,7 @@ app.delete("/home/storiesu/:id", (req, res) => {
     });
 });
 
+//Delete story for admin
 app.delete("/home/stories/:id", (req, res) => {
     const sql = `
     DELETE FROM stories
@@ -235,21 +230,7 @@ app.delete("/home/stories/:id", (req, res) => {
 });
 
 
-//EDIT
-app.put("/home/movies/:id", (req, res) => {
-    const sql = `
-    UPDATE movies
-    SET 
-    rating_sum = rating_sum + ?, 
-    rating_count = rating_count + 1, 
-    rating = rating_sum / rating_count
-    WHERE id = ?
-    `;
-    con.query(sql, [req.body.rate, req.params.id], (err, result) => {
-        if (err) throw err;
-        res.send({ msg: 'OK', text: 'Thanks for your vote!', type: 'info' });
-    });
-});
+
 
 //EDIT a story for user
 app.put("/home/storiesu/:id", (req, res) => {
@@ -297,21 +278,21 @@ app.put("/home/storiesa/:id", (req, res) => {
   });
 });
 
-// // UPDATE STORIE - add donation
+// UPDATE story - add donation
 
-// app.put("/home/stories-donation/:id", (req, res) => {
-//     const sql = `
-//       UPDATE stories
-//       SET 
-//       amount_collected = amount_collected + ?,
-//       amount_left = amount_wanted - amount_collected
-//       WHERE id = ?
-//       `;
-//     con.query(sql, [req.body.amount_donating, req.params.id], (err, result) => {
-//       if (err) throw err;
-//       res.send(result);
-//     });
-//   });
+app.put("/home/stories-donation/:id", (req, res) => {
+    const sql = `
+      UPDATE stories
+      SET 
+      sum_now = sum_now + ?,
+      sum_balance = sum - sum_now
+      WHERE id = ?
+      `;
+    con.query(sql, [req.body.amount, req.params.id], (err, result) => {
+      if (err) throw err;
+      res.send(result);
+    });
+  });
 
 app.listen(port, () => {
     console.log(`Filmus rodo per ${port} portą!`)
