@@ -20,6 +20,7 @@ import Messages from "./Components/Messages";
 
 function App() {
   const [roleChange, setRoleChange] = useState(Date.now());
+  const [showLinks, setShowLinks] = useState(false);
   const [msgs, setMsgs] = useState([]);
 
   const makeMsg = useCallback((text, type = "") => {
@@ -55,6 +56,8 @@ function App() {
         msgs,
         setMsgs,
         makeMsg,
+        showLinks,
+        setShowLinks
       }}
     >
       <BrowserRouter>

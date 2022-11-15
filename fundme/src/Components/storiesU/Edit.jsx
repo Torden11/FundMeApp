@@ -41,7 +41,7 @@ function Edit() {
         }
         setTitle(modalData.title);
         setText(modalData.text);
-        setSum(modalData.price);
+        setSum(modalData.sum);
         setPhotoPrint(modalData.image);
         setDeletePhoto(false);
     }, [modalData])

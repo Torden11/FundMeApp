@@ -217,7 +217,7 @@ app.delete("/home/storiesu/:id", (req, res) => {
     });
 });
 
-//Delete story for admin
+//Delete a story for admin
 app.delete("/home/stories/:id", (req, res) => {
     const sql = `
     DELETE FROM stories
@@ -264,7 +264,7 @@ app.put("/home/storiesu/:id", (req, res) => {
     });
 });
 
-// UPDATE STORY for admin - APPROVE
+// UPDATE story for admin - APPROVE
 
 app.put("/home/storiesa/:id", (req, res) => {
   const sql = `
@@ -274,11 +274,11 @@ app.put("/home/storiesa/:id", (req, res) => {
     `;
   con.query(sql, [req.body.status, req.params.id], (err, result) => {
     if (err) throw err;
-    res.send(result);
+    res.send({ msg: 'OK', text: 'The story has been approved.', type: 'success' });
   });
 });
 
-// UPDATE story - add donation
+// UPDATE story after adding a donation
 
 app.put("/home/stories-donation/:id", (req, res) => {
     const sql = `

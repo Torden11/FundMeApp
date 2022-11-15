@@ -19,9 +19,9 @@ function Main() {
         axios.get('http://localhost:3003/home/storiesa', authConfig())
             .then(res => {
                 setStoriesu(res.data);
-                makeMsg(res.data.text, res.data.type);
+               
             })
-    }, [lastUpdate, makeMsg]);
+    }, [lastUpdate]);
 
     // UPDATE a story
 

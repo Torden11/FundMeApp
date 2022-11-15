@@ -32,14 +32,14 @@ function Line({ story }) {
           <div className="line__content__info">
             Amount needed: {story.sum} EUR
           </div>
-          <div className="line__content__info">
-            Status: {story.status ? "Approved" : "Not approved"}
+          <div className="home__content__cat">
+            Status: {story.status ? (<div style={{color: "green"}}>"Approved"</div>) : (<div style={{color: "crimson"}}> "Not approved"</div>)}
           </div>
-          <div className="home__buttons">
+          <div className="line__buttons">
             <button
               onClick={approve}
               type="button"
-              className="btn btn-outline-danger"
+              className="btn btn-outline-success"
             >
               Approve
             </button>
