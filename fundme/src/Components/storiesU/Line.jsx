@@ -1,33 +1,33 @@
 import { useContext } from 'react';
-import Movies from '../../Contexts/Movies';
+import StoriesU from '../../Contexts/StoriesU';
 
-function Line({ movie }) {
+function Line({ story }) {
 
-    const { setDeleteData, setModalData } = useContext(Movies);
+    const { setDeleteData, setModalData } = useContext(StoriesU);
 
     return (
         <li className="list-group-item">
             <div className="line">
                 <div className="line__content">
                     <div className="line__content__info">
-                        {movie.image ? <div className='img-bin'>
-                            <img src={movie.image} alt={movie.title}>
+                        {story.image ? <div className='img-bin'>
+                            <img src={story.image} alt={story.title}>
                             </img>
                         </div> : <span className="red-image">No image</span>}
                     </div>
                     <div className="line__content__title">
-                        <h1>{movie.title}</h1>
+                        <h1>{story.title}</h1>
                     </div>
                     <div className="line__content__info">
-                        Price: {movie.price} EUR
+                        Description: {story.text}
                     </div>
                     <div className="line__content__info">
-                        Rating: {movie.rating ?? 'no rating'}
+                        Amount needed: {story.sum} EUR
                     </div>
                 </div>
                 <div className="line__buttons">
-                    <button onClick={() => setModalData(movie)} type="button" className="btn btn-outline-success">Edit</button>
-                    <button onClick={() => setDeleteData(movie)} type="button" className="btn btn-outline-danger">Delete</button>
+                    <button onClick={() => setModalData(story)} type="button" className="btn btn-outline-success">Edit</button>
+                    <button onClick={() => setDeleteData(story)} type="button" className="btn btn-outline-danger">Delete</button>
                 </div>
             </div>
         </li>

@@ -130,15 +130,15 @@ app.post("/register", (req, res) => {
 
 ///////////////////END////////////////////
 
-//CREATE
-app.post("/server/movies", (req, res) => {
+//CREATE STORY for user
+app.post("/home/storiesu", (req, res) => {
     const sql = `
-    INSERT INTO movies (title, price, image)
-    VALUES (?, ?, ?)
+    INSERT INTO stories (title, text, sum, sum_balance, image)
+    VALUES (?, ?, ?, ?, ?)
     `;
-    con.query(sql, [req.body.title, req.body.price, req.body.image], (err, result) => {
+    con.query(sql, [req.body.title, req.body.text, req.body.sum, req.body.sum_balance, req.body.image], (err, result) => {
         if (err) throw err;
-        res.send({ msg: 'OK', text: 'A new movie has been added.', type: 'success' });
+        res.send({ msg: 'OK', text: 'A new story has been added.', type: 'success' });
     });
 });
 
@@ -153,11 +153,24 @@ app.post("/home/comments/:id", (req, res) => {
     });
 });
 
-// READ (all)
-app.get("/server/movies", (req, res) => {
+// READ stories for user
+app.get("/home/storiesu", (req, res) => {
     const sql = `
     SELECT *
-    FROM movies
+    FROM stories
+    ORDER BY id DESC
+    `;
+    con.query(sql, (err, result) => {
+        if (err) throw err;
+        res.send(result);
+    });
+});
+
+// READ stories for admin
+app.get("/home/storiesa", (req, res) => {
+    const sql = `
+    SELECT *
+    FROM stories
     ORDER BY id DESC
     `;
     con.query(sql, (err, result) => {
@@ -167,57 +180,57 @@ app.get("/server/movies", (req, res) => {
 });
 
 //Get all movies in comments section for admin
-app.get("/home/movies", (req, res) => {
-    const sql = `
-    SELECT m.*, c.id AS cid, c.post
-    FROM movies AS m
-    LEFT JOIN comments AS c
-    ON c.movie_id = m.id
-    ORDER BY m.title
-    `;
-    con.query(sql, (err, result) => {
-        if (err) throw err;
-        res.send(result);
-    });
-});
+// app.get("/home/movies", (req, res) => {
+//     const sql = `
+//     SELECT m.*, c.id AS cid, c.post
+//     FROM movies AS m
+//     LEFT JOIN comments AS c
+//     ON c.movie_id = m.id
+//     ORDER BY m.title
+//     `;
+//     con.query(sql, (err, result) => {
+//         if (err) throw err;
+//         res.send(result);
+//     });
+// });
 
 //OR
 // Get only movies with comments in comments section for admin
-app.get("/server/movies/nocomments", (req, res) => {
-    const sql = `
-    SELECT m.*, c.id AS cid, c.post
-    FROM movies AS m
-    INNER JOIN comments AS c
-    ON c.movie_id = m.id
-    ORDER BY m.title
-    `;
-    con.query(sql, (err, result) => {
-        if (err) throw err;
-        res.send(result);
-    });
-});
+// app.get("/server/movies/nocomments", (req, res) => {
+//     const sql = `
+//     SELECT m.*, c.id AS cid, c.post
+//     FROM movies AS m
+//     INNER JOIN comments AS c
+//     ON c.movie_id = m.id
+//     ORDER BY m.title
+//     `;
+//     con.query(sql, (err, result) => {
+//         if (err) throw err;
+//         res.send(result);
+//     });
+// });
 
 
 //DELETE
-app.delete("/server/movies/:id", (req, res) => {
+app.delete("/home/storiesu/:id", (req, res) => {
     const sql = `
-    DELETE FROM movies
+    DELETE FROM stories
     WHERE id = ?
     `;
     con.query(sql, [req.params.id], (err, result) => {
         if (err) throw err;
-        res.send({ msg: 'OK', text: 'The movie has been deleted.', type: 'info' });
+        res.send({ msg: 'OK', text: 'The story has been deleted.', type: 'info' });
     });
 });
 
-app.delete("/server/comments/:id", (req, res) => {
+app.delete("/home/stories/:id", (req, res) => {
     const sql = `
-    DELETE FROM comments
+    DELETE FROM stories
     WHERE id = ?
     `;
     con.query(sql, [req.params.id], (err, result) => {
         if (err) throw err;
-        res.send({ msg: 'OK', text: 'Unappropriate comment has been deleted.', type: 'info' });
+        res.send({ msg: 'OK', text: 'Unappropriate story has been deleted.', type: 'info' });
     });
 });
 
@@ -237,36 +250,68 @@ app.put("/home/movies/:id", (req, res) => {
         res.send({ msg: 'OK', text: 'Thanks for your vote!', type: 'info' });
     });
 });
-app.put("/server/movies/:id", (req, res) => {
+
+//EDIT a story for user
+app.put("/home/storiesu/:id", (req, res) => {
     let sql;
     let r;
     if (req.body.deletePhoto) {
         sql = `
-        UPDATE movies
-        SET title = ?, price = ?, image = null
+        UPDATE stories
+        SET title = ?, text = ?, sum = ?, sum_balance = ?, image = null
         WHERE id = ?
         `;
-        r = [req.body.title, req.body.price, req.params.id];
+        r = [req.body.title, req.body.text, req.body.sum, req.body.sum_balance, req.params.id];
     } else if (req.body.image) {
         sql = `
-        UPDATE movies
-        SET title = ?, price = ?, image = ?
+        UPDATE stories
+        SET title = ?, text = ?, sum = ?, sum_balance = ?, image = ?
         WHERE id = ?
         `;
-        r = [req.body.title, req.body.price, req.body.image, req.params.id];
+        r = [req.body.title, req.body.text, req.body.sum, req.body.sum_balance, req.body.image, req.params.id];
     } else {
         sql = `
-        UPDATE movies
-        SET title = ?, price = ?
+        UPDATE stories
+        SET title = ?, text = ?, sum = ?, sum_balance = ?
         WHERE id = ?
         `;
-        r = [req.body.title, req.body.price, req.params.id]
+        r = [req.body.title, req.body.text, req.body.sum, req.body.sum_balance, req.params.id]
     }
     con.query(sql, r, (err, result) => {
         if (err) throw err;
-        res.send({ msg: 'OK', text: 'The movie has been edited.', type: 'success' });
+        res.send({ msg: 'OK', text: 'The story has been edited.', type: 'success' });
     });
 });
+
+// UPDATE STORY for admin - APPROVE
+
+app.put("/home/storiesa/:id", (req, res) => {
+  const sql = `
+    UPDATE stories
+    SET status = ?
+    WHERE id = ?
+    `;
+  con.query(sql, [req.body.status, req.params.id], (err, result) => {
+    if (err) throw err;
+    res.send(result);
+  });
+});
+
+// // UPDATE STORIE - add donation
+
+// app.put("/home/stories-donation/:id", (req, res) => {
+//     const sql = `
+//       UPDATE stories
+//       SET 
+//       amount_collected = amount_collected + ?,
+//       amount_left = amount_wanted - amount_collected
+//       WHERE id = ?
+//       `;
+//     con.query(sql, [req.body.amount_donating, req.params.id], (err, result) => {
+//       if (err) throw err;
+//       res.send(result);
+//     });
+//   });
 
 app.listen(port, () => {
     console.log(`Filmus rodo per ${port} portą!`)

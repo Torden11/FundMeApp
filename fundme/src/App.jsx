@@ -8,8 +8,8 @@ import {
 } from "react-router-dom";
 import Nav from "./Components/Nav";
 import Home from "./Components/home/Main";
-import MainComments from "./Components/comment/Main";
-import MainMovies from "./Components/movies/Main";
+import MainComments from "./Components/storiesA/Main";
+import MainMovies from "./Components/storiesU/Main";
 import RegisterPage from "./Components/register/Main";
 import { login, logout, authConfig } from "./Functions/auth";
 import { useState, useEffect, useCallback, useContext } from "react";
@@ -78,17 +78,17 @@ function App() {
             element={<LogoutPage setRoleChange={setRoleChange} />}
           />
           <Route
-            path="/movies"
+            path="/storiesUser"
             element={
-              <RequireAuth role="admin">
+              <RequireAuth role="user">
                 <MainMovies />
               </RequireAuth>
             }
           ></Route>
           <Route
-            path="/comments"
+            path="/storiesAdmin"
             element={
-              <RequireAuth role="admin">
+              <RequireAuth role="user">
                 <MainComments />
               </RequireAuth>
             }

@@ -1,18 +1,20 @@
 import { useState, useContext, useRef } from 'react';
 import DataContext from '../../Contexts/DataContext';
-import Movies from '../../Contexts/Movies';
+import StoriesU from '../../Contexts/StoriesU';
 import getBase64 from '../../Functions/getBase64';
 
 function Create() {
 
     const [title, setTitle] = useState('');
-    const [price, setPrice] = useState('');
+    const [text, setText] = useState('');
+    const [sum, setSum] = useState('');
+    const [photoPrint, setPhotoPrint] = useState(null);
     const fileInput = useRef();
 
-    const { setCreateData } = useContext(Movies);
+    const { setCreateData } = useContext(StoriesU);
     const {makeMsg} = useContext(DataContext);
 
-    const [photoPrint, setPhotoPrint] = useState(null);
+    
 
     const doPhoto = () => {
         getBase64(fileInput.current.files[0])
@@ -28,39 +30,50 @@ function Create() {
             makeMsg('Invalid title', 'error');
             return;
         }
-        if (price.replace(/[^\d.]/, '') !== price) {
-            makeMsg('Invalid price', 'error');
+        if (text.length === 0 || text.length > 250) {
+            makeMsg('Invalid text message. Please use up to 250 symbols.', 'error');
             return;
         }
-        if (parseFloat(price) > 99.99) {
-            makeMsg('Max price is 99.99', 'error');
+        if (sum.replace(/[^\d.]/, '') !== sum) {
+            makeMsg('Invalid sum', 'error');
+            return;
+        }
+        if (parseFloat(sum) > 100000) {
+            makeMsg('Max sum is 100000', 'error');
             return;
         }
         setCreateData({
             title,
-            price: parseFloat(price),
+            text,
+            sum: Number(sum),
+            sum_balance: Number(sum),
             image: photoPrint
         });
         setTitle('');
-        setPrice('');
+        setText('');
+        setSum('');
         setPhotoPrint(null);
         fileInput.current.value = null;
     }
 
     return (
         <div className="card m-4 col-lg-4 col-md-12">
-            <h5 className="card-header">New Movie</h5>
+            <h5 className="card-header">New Story</h5>
             <div className="card-body">
                 <div className="mb-3">
-                    <label className="form-label">Movie title</label>
+                    <label className="form-label">Story title</label>
                     <input type="text" className="form-control" value={title} onChange={e => setTitle(e.target.value)} />
                 </div>
                 <div className="mb-3">
-                    <label className="form-label">Movie Price</label>
-                    <input type="text" className="form-control" value={price} onChange={e => setPrice(e.target.value)} />
+                    <label className="form-label">Story text</label>
+                    <input type="text" className="form-control" value={text} onChange={e => setText(e.target.value)} />
                 </div>
                 <div className="mb-3">
-                    <label className="form-label">Movie Image</label>
+                    <label className="form-label">Story Sum</label>
+                    <input type="text" className="form-control" value={sum} onChange={e => setSum(e.target.value)} />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Story Image</label>
                     <input ref={fileInput} type="file" className="form-control" onChange={doPhoto} />
                 </div>
                 {photoPrint ? <div className='img-bin'><img src={photoPrint} alt="upload"></img></div> : null}

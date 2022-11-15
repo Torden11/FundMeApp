@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState, useRef } from 'react';
-import Movies from '../../Contexts/Movies';
+import StoriesU from '../../Contexts/StoriesU';
 import getBase64 from '../../Functions/getBase64';
 
 function Edit() {
 
     const [title, setTitle] = useState('');
-    const [price, setPrice] = useState('');
+    const [text, setText] = useState('');
+    const [sum, setSum] = useState('');
     const fileInput = useRef();
     const [photoPrint, setPhotoPrint] = useState(null);
     const [deletePhoto, setDeletePhoto] = useState(false);
@@ -18,12 +19,14 @@ function Edit() {
             })
     }
 
-    const { setEditData, modalData, setModalData } = useContext(Movies);
+    const { setEditData, modalData, setModalData } = useContext(StoriesU);
 
     const edit = () => {
         setEditData({
             title,
-            price: parseFloat(price),
+            text,
+            sum: Number(sum),
+            sum_balance: Number(sum),
             id: modalData.id,
             deletePhoto: deletePhoto ? 1 : 0,
             image: photoPrint
@@ -37,7 +40,8 @@ function Edit() {
             return;
         }
         setTitle(modalData.title);
-        setPrice(modalData.price);
+        setText(modalData.text);
+        setSum(modalData.price);
         setPhotoPrint(modalData.image);
         setDeletePhoto(false);
     }, [modalData])
@@ -52,22 +56,26 @@ function Edit() {
             <div className="modal-dialog modal-dialog-centered">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <h5 className="modal-title">Edit Movie</h5>
+                        <h5 className="modal-title">Edit Story</h5>
                         <button onClick={() => setModalData(null)} type="button" className="btn-close"></button>
                     </div>
                     <div className="modal-body"></div>
                     <div className="card m-4">
                         <div className="card-body">
                             <div className="mb-3">
-                                <label className="form-label">Movie Title</label>
+                                <label className="form-label">Story Title</label>
                                 <input type="text" className="form-control" value={title} onChange={e => setTitle(e.target.value)} />
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">Movie Price</label>
-                                <input type="text" className="form-control" value={price} onChange={e => setPrice(e.target.value)} />
+                                <label className="form-label">Story Text</label>
+                                <input type="text" className="form-control" value={text} onChange={e => setText(e.target.value)} />
                             </div>
                             <div className="mb-3">
-                                <label className="form-label">Movie Image</label>
+                                <label className="form-label">Story Sum</label>
+                                <input type="text" className="form-control" value={sum} onChange={e => setSum(e.target.value)} />
+                            </div>
+                            <div className="mb-3">
+                                <label className="form-label">Story Image</label>
                                 <input ref={fileInput} type="file" className="form-control" onChange={doPhoto} />
                             </div>
                             {photoPrint ? <div className='img-bin'>
