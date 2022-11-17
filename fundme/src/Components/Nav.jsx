@@ -19,6 +19,7 @@ function Nav({ status }) {
             <div className="container-fluid">
               <span className="navbar-brand" onClick={goHome} >FundMeApp</span>
               <div className="navbar-collapse">
+                <i className="fa fa-bars" onClick={() => setShowLinks(!showLinks)}></i>
                 <div className="navbar-nav" id={showLinks ? "hidden" : ""}>
                   {status === 2 || status === 3 || status === 4 ? (
                     <NavLink
@@ -58,12 +59,13 @@ function Nav({ status }) {
                   ) : null}
                   {status === 1 ? <NavLink to="/register" className="nav-link">Register</NavLink> : null}
                 </div>
-                <button
+                
+                {/* <button
                   className="menu-btn"
                   onClick={() => setShowLinks(!showLinks)}
                 >
                   Menu
-                </button>
+                </button> */}
               </div>
             </div>
           </nav>
