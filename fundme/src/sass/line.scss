@@ -27,6 +27,7 @@
     justify-content: flex-end;
     align-items: center;
     margin: auto;
+    padding-top: 10px;
     button {
       margin-left: 5px;
     }
@@ -43,6 +44,7 @@
   &__content {
     display: flex;
     flex-wrap: wrap;
+    flex-direction: column;
     &__title {
       font-size: 20px;
       font-weight: bold;
@@ -69,11 +71,16 @@
       }
     }
     &__cat {
-      font-size: 15px;
-      color: orange;
-      margin-right: 10px;
-      font-weight: bold;
-      width: 200px;
+      display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    font-size: 15px;
+    color: orange;
+    /* margin-left: 10px; */
+    font-weight: bold;
+    /* width: 200px; */
+    // padding: 20px;
     }
     &__price {
       color: gray;

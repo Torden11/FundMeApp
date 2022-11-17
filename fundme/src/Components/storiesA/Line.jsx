@@ -29,10 +29,10 @@ function Line({ story }) {
             <h1>{story.title}</h1>
           </div>
           <div className="line__content__info">Description: {story.text}</div>
-          <div className="line__content__info">
+          <div className="line__content__price">
             Amount needed: {story.sum} EUR
           </div>
-          <div className="home__content__cat">
+          <div className="home__content__info">
             Status: {story.status ? (<div style={{color: "green"}}>"Approved"</div>) : (<div style={{color: "crimson"}}> "Not approved"</div>)}
           </div>
           <div className="line__buttons">

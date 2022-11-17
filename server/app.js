@@ -154,7 +154,7 @@ app.post("/home/donations", (req, res) => {
       [req.body.name, req.body.amount, req.body.story_id],
       (err, result) => {
         if (err) throw err;
-        res.send({ msg: 'OK', text: 'Thank you for your donation!.', type: 'success' });
+        res.send({ msg: 'OK', text: 'Thank you for your donation!', type: 'success' });
       }
     );
   });
@@ -194,7 +194,7 @@ app.get("/home/stories-home", (req, res) => {
       LEFT JOIN list AS l
       ON l.story_id = s.id
       WHERE s.status = 1
-      ORDER BY s.id
+      ORDER BY s.sum_balance ASC
       `;
     con.query(sql, (err, result) => {
       if (err) throw err;

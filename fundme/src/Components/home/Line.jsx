@@ -67,10 +67,10 @@ function Line({ story }) {
 
           <div className="home__content__cat">
             <h4>Already helped us:</h4>
-            <ul className="list-group">
+            <ul className="list-group list-group-flush">
               {story[1]?.map((l) =>
                 l.lid !== null ? (
-                  <li key={l.lid} className="list-group-item">
+                  <li key={l.lid} className="list-group-item list-group-item-info">
                     <div className="home__content__cat">
                       {l.name} has donated:
                     </div>
